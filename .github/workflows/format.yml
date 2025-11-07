@@ -1,0 +1,33 @@
+name: Format Uploaded Word Files
+
+on:
+  push:
+    paths:
+      - "uploads/**"   # uploads klasörüne dosya yüklendiğinde çalışır
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Kodları yükle
+        uses: actions/checkout@v3
+
+      - name: Python kurulumunu yap
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Gerekli kütüphaneleri yükle
+        run: |
+          pip install python-docx
+
+      - name: Biçimlendirme işlemini çalıştır
+        run: |
+          python main.py
+
+      - name: Biçimlendirilmiş dosyaları kaydet
+        uses: actions/upload-artifact@v3
+        with:
+          name: formatted-documents
+          path: outputs/
